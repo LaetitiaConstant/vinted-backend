@@ -102,7 +102,7 @@ router.get("/offers", async (req, res) => {
 			.limit(limit)
 			.populate({
 				path: "owner",
-				select: "account.username account.phone account.avatar",
+				select: "account.username account.phone avatar",
 			});
 
 		// number of ads found based on filters
