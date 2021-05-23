@@ -54,8 +54,8 @@ router.post("/user/signup", async (req, res) => {
 					account: {
 						username: newUser.account.username,
 						phone: newUser.account.phone,
-						avatar: newUser.avatar,
 					},
+					avatar: newUser.avatar,
 				});
 			} else {
 				res.status(400).json({ message: "Missing parameters" });
