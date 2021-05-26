@@ -2,11 +2,28 @@
 const express = require("express");
 const router = express.Router();
 const cloudinary = require("cloudinary").v2;
+const stripe = require("stripe")(process.env.STRIPE_API_SECRET);
 
 // Import model User, Offer and middleware isAuthenticated
 const User = require("../models/User");
 const Offer = require("../models/Offer");
 const isAuthenticated = require("../middleware/isAuthenticated");
+
+router.post("/payment", async (req, res) => {
+	// Etape 1 : Je reçois les infos en body, dont le stripeToken
+	try {
+		// Etape 2 : Envoyer ce stripToken à l'API Stripe
+		const response = await stripe.charges.create({
+			amount: req.fields.amount * 100,
+			title: req.fields.title,
+			token: req.fields.token,
+		});
+		res.json(response);
+	} catch (error) {
+		console.log(error.message);
+		res.status(400).json({ error: error.message });
+	}
+});
 
 router.post("/offer/publish", isAuthenticated, async (req, res) => {
 	// Publish new offer
